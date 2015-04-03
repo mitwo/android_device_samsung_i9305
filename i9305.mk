@@ -78,9 +78,7 @@ $(call inherit-product, vendor/cm/config/nfc_enhanced.mk)
 
 # RIL
 PRODUCT_PROPERTY_OVERRIDES += \
-    ro.telephony.ril_class=SamsungQualcommRIL \
-    mobiledata.interfaces=pdp0,wlan0,gprs,ppp0 \
-    ro.telephony.ril.v3=exynos4RadioState
+      mobiledata.interfaces=pdp0,gprs,ppp0,rmnet0,rmnet1
 
 # These are the hardware-specific features
 PRODUCT_COPY_FILES += \

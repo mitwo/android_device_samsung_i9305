@@ -49,10 +49,13 @@ on post-fs-data
     restorecon /efs/FactoryApp/serial_no
     restorecon /efs/imei/mps_code.dat
     restorecon /efs/wifi/.mac.info
-
-    # for AT distributor
-    chown system radio /sys/module/cpuidle_exynos4/parameters/enable_mask
-    chmod 0664 /sys/module/cpuidle_exynos4/parameters/enable_mask
+    restorecon /tombstones
+    restorecon /tombstones/qcks
+    restorecon /tombstones/qcks/acdb.bin
+    restorecon /tombstones/qcks/efs1.bin
+    restorecon /tombstones/qcks/efs2.bin
+    restorecon /tombstones/qcks/efs3.bin
+    restorecon /tombstones/qcks/temp.dump
 
     # Waketime fot fast dormancy
     chown system radio /sys/devices/platform/mdm_hsic_pm0/waketime
@@ -75,12 +78,6 @@ on property:sys.boot_completed=1
 #    write /proc/sys/net/ipv6/conf/rmnet_usb2/accept_ra 2
 #    write /proc/sys/net/ipv6/conf/rmnet_usb3/accept_ra 2
 # SISO-ANDR_PERF :: END
-
-# AT Distributor for factory test
-service at_distributor /system/bin/at_distributor
-    class main
-    user root
-    group radio log
 
 # diag app for cp uart
 service diag_uart_log /system/bin/diag_uart_log
@@ -117,20 +114,9 @@ service qmiproxy /system/bin/qmiproxy
 service qmuxd /system/bin/qmuxd
     class main
     user system
-    seclabel u:r:qmux:s0
     group radio log audio bluetooth gps log
 
-#start GNSS/Sensor interface daemon
 service gsiff_daemon /system/bin/gsiff_daemon
     class late_start
     user system
     group qcom_oncrpc gps
-
-# TVout
-service TvoutService_C /system/bin/bintvoutservice
-    class main
-    user system
-    group graphics
-
-on property:ro.tvout.enable=false
-    stop TvoutService_C
